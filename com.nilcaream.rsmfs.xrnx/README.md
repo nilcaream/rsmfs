@@ -10,10 +10,11 @@ This plugin will reuse existing instrument and will only update existing tracks 
 
 - reads midi files with `.xrmid` extension,
 - prints notes and file information in Scripting Terminal.
+- converts midi note events to Renoise patterns (print only).
 
 ## Capabilities and limitations
 
-This is my first Renoise tool and first code in Lua. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
+This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
 It is not possible to override midi files import procedure so the midi files need to be renamed to have `.xrmid`   extension. E.g. `my-file.mid` needs to be renamed to `my-file.xrmid`.
 
