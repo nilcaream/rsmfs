@@ -11,7 +11,6 @@ function Track:new(_table, ticks_per_beat, resolution)
 
     for index, value in ipairs(_table) do
         table.insert(instance, {
-            note_number = value.note_number,
             note = value.note,
             start_position = value.start_time / tick,
             end_position = value.end_time / tick,
@@ -24,13 +23,13 @@ end
 
 function Track:print()
     for index, value in ipairs(self) do
-        log("Track line: % 2d, start: %6.2f, end: %6.2f, note: %3s (% 3d), velocity: % 3d", index, value.start_position, value.end_position, value.note, value.note_number, value.velocity)
+        log("start: %6.2f, end: %6.2f, note: %3s, velocity: % 3d", value.start_position, value.end_position, value.note, value.velocity)
     end
 end
 
 -- =========================================
 
-function Track.add_raw(note, tracks)
+function Track.add_raw(midi_note, tracks)
     for track_index = 1, 16 do
         if tracks[track_index] == nil then
             table.insert(tracks, {})
@@ -39,12 +38,12 @@ function Track.add_raw(note, tracks)
         local track = tracks[track_index]
 
         if #track == 0 then
-            table.insert(track, note)
+            table.insert(track, midi_note)
             return
         else
             local last_note = track[#track]
-            if note.start_time >= last_note.end_time then
-                table.insert(tracks[track_index], note)
+            if midi_note.start_time >= last_note.end_time then
+                table.insert(tracks[track_index], midi_note)
                 return
             end
         end

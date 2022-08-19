@@ -2,8 +2,9 @@ require("common")
 
 local MIDI = require("MIDI")
 
-require("note")
+require("midi-note")
 require("track")
+require("workplace")
 
 function load_file(filename)
     local file = io.open(filename, "rb")
@@ -31,7 +32,7 @@ function mid_import(filename)
     log("Total ticks: " .. stats.nticks)
     log("Ticks per beat: " .. score[1])
 
-    local tracks = { }
+    local raw_track_lines = { }
 
     log("-------- Raw midi input")
 
@@ -40,17 +41,21 @@ function mid_import(filename)
 
             -- TODO check if this is always sorted by start_time; filter by channel
             if event[1] == "note" then
-                local note = Note:new(event)
-                log(note:__tostring())
-                Track.add_raw(note, tracks)
+                local midi_note = MidiNote:new(event)
+                log(midi_note:__tostring())
+                Track.add_raw(midi_note, raw_track_lines)
             end
         end
     end
 
-    for index, value in ipairs(tracks) do
-        log("-------- Track " .. index)
+    local workplace = Workplace:new()
+    workplace:prepare(#raw_track_lines)
+
+    for index, value in ipairs(raw_track_lines) do
+        log("-------- Note column " .. index)
         local track = Track:new(value, score[1])
         track:print()
+        workplace:update(track, index)
     end
 
     return true
