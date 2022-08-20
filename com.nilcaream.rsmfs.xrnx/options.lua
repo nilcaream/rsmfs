@@ -9,6 +9,7 @@ rsmfs.options = {
     transposition = 0,
     octave = 1,
     show_for_each_file = true,
+    include_velocity = true,
 }
 
 rsmfs.options.init = function()
@@ -90,6 +91,9 @@ rsmfs.options.show = function(on_action)
                 end),
                 add_checkbox("Decrease number of lines", rsmfs.options.decrease_number_of_lines, function(v)
                     rsmfs.options.decrease_number_of_lines = v
+                end),
+                add_checkbox("Include velocity", rsmfs.options.include_velocity, function(v)
+                    rsmfs.options.include_velocity = v
                 end),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },

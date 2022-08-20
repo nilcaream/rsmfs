@@ -2,10 +2,10 @@
 <RenoiseScriptingTool doc_version="0">
   <ApiVersion>6.1</ApiVersion>
   <Id>com.nilcaream.rsmfs</Id>
-  <Version>0.1</Version>
+  <Version>0.2</Version>
   <Author>Nil Caream [nil.caream@gmail.com]</Author>
   <Name>Renoise Simple Midi File Support</Name>
-  <Category>Tool Development</Category>
+  <Category>File Formats, MIDI</Category>
   <Description>Renoise Simple Midi File Support</Description>
-  <Homepage>http://nilcaream.com</Homepage>
+  <Homepage>https://github.com/nilcaream/rsmfs</Homepage>
 </RenoiseScriptingTool>
