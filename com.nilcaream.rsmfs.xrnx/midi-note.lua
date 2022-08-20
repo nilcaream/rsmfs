@@ -1,3 +1,5 @@
+require("common")
+
 MidiNote = {}
 MidiNote.__index = MidiNote
 
@@ -23,8 +25,10 @@ end
 
 local notes_sharp = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
 
+-- https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
 function to_note_string(midi_note_number, _dictionary)
-    -- https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
+    midi_note_number = midi_note_number + 12 * rsmfs.options.octave + rsmfs.options.transposition
+
     local dictionary = _dictionary or notes_sharp
     local note_index = midi_note_number % #dictionary
     local octave = math.floor(midi_note_number / #dictionary) - 1

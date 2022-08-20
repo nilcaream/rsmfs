@@ -1,5 +1,11 @@
+rsmfs = {}
+
+rsmfs.log = function(s,...)
+    print("RSMFS " .. string.format(s, ...))
+end
+
 function log(s, ...)
     print("RSMFS " .. string.format(s, ...))
 end
 
-log("Renoise Simple Midi File Support")
+rsmfs.log("Renoise Simple Midi File Support")

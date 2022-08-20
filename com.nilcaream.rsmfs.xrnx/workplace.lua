@@ -1,4 +1,5 @@
 require("common")
+require("options")
 
 Workplace = {}
 Workplace.__index = Workplace
@@ -20,7 +21,10 @@ function Workplace:prepare(track_lines_number)
         line:clear()
     end
 
-    if self.track.visible_note_columns < track_lines_number then
+    local add_note_columns = self.track.visible_note_columns < track_lines_number and rsmfs.options.add_note_columns
+    local remove_note_columns = self.track.visible_note_columns > track_lines_number and rsmfs.options.remove_note_columns
+
+    if add_note_columns or remove_note_columns then
         self.track.visible_note_columns = track_lines_number
     end
 end
@@ -52,7 +56,10 @@ function Workplace:update(pre_track_entries, line_index)
         end
     end
 
-    if max_end_position > self.pattern.number_of_lines then
+    local increase_number_of_lines = max_end_position > self.pattern.number_of_lines and rsmfs.options.increase_number_of_lines
+    local decrease_number_of_lines = max_end_position < self.pattern.number_of_lines and rsmfs.options.decrease_number_of_lines
+
+    if increase_number_of_lines or decrease_number_of_lines then
         self.pattern.number_of_lines = max_end_position
     end
 end

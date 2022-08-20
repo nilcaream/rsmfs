@@ -5,6 +5,7 @@ local MIDI = require("MIDI")
 require("midi-note")
 require("track")
 require("workplace")
+require("options")
 
 function load_file(filename)
     local file = io.open(filename, "rb")
@@ -22,6 +23,11 @@ function load_file(filename)
 end
 
 function mid_import(filename)
+
+    if rsmfs.options.show_for_each_file then
+        rsmfs.options.show()
+    end
+
     log("-------- Loading " .. filename)
 
     local midi = load_file(filename)
@@ -72,3 +78,5 @@ if renoise.tool():has_file_import_hook(integration.category, integration.extensi
 else
     log("Import hook already present")
 end
+
+rsmfs.options.init()

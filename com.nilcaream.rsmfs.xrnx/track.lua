@@ -3,8 +3,8 @@ require("common")
 Track = {}
 Track.__index = Track
 
-function Track:new(_table, ticks_per_beat, resolution)
-    resolution = resolution or 1
+function Track:new(_table, ticks_per_beat)
+    local resolution = rsmfs.options.resolution / 4
     local tick = ticks_per_beat / (renoise.song().transport.lpb * resolution)
 
     local instance = { }
