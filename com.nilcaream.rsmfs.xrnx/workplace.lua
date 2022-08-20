@@ -1,10 +1,9 @@
 require("common")
-require("options")
 
-Workplace = {}
-Workplace.__index = Workplace
+rsmfs.workplace = {}
+rsmfs.workplace.__index = rsmfs.workplace
 
-function Workplace:new()
+function rsmfs.workplace:new()
     local instance = {
         pattern_track = renoise.song().selected_pattern_track,
         track_index = renoise.song().selected_track_index,
@@ -12,12 +11,12 @@ function Workplace:new()
         pattern = renoise.song().selected_pattern,
         instrument = renoise.song().selected_instrument_index - 1
     }
-    setmetatable(instance, Workplace)
+    setmetatable(instance, rsmfs.workplace)
     return instance
 end
 
-function Workplace:prepare(track_lines_number)
-    for i, line in ipairs(self.pattern_track.lines) do
+function rsmfs.workplace:prepare(track_lines_number)
+    for index, line in ipairs(self.pattern_track.lines) do
         line:clear()
     end
 
@@ -29,15 +28,15 @@ function Workplace:prepare(track_lines_number)
     end
 end
 
-function Workplace:update(pre_track_entries, line_index)
+function rsmfs.workplace:update(pre_track_entries, line_index)
     local max_end_position = 1
 
-    for i, pre_track_entry in ipairs(pre_track_entries) do
+    for index, pre_track_entry in ipairs(pre_track_entries) do
         local start_position = math.floor(pre_track_entry.start_position)
         local end_position = math.floor(pre_track_entry.end_position)
 
         max_end_position = math.max(max_end_position, end_position)
-        --log("Update %s %d %d", pre_track_entry.note, start_position, end_position)
+        -- rsmfs.log("Update %s %d %d", pre_track_entry.note, start_position, end_position)
 
         self.pattern_track:line(start_position + 1):note_column(line_index).instrument_value = self.instrument
         self.pattern_track:line(start_position + 1):note_column(line_index).volume_value = pre_track_entry.velocity

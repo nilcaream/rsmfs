@@ -1,9 +1,9 @@
 require("common")
 
-Track = {}
-Track.__index = Track
+rsmfs.track = {}
+rsmfs.track.__index = rsmfs.track
 
-function Track:new(_table, ticks_per_beat)
+function rsmfs.track:new(_table, ticks_per_beat)
     local resolution = rsmfs.options.resolution / 4
     local tick = ticks_per_beat / (renoise.song().transport.lpb * resolution)
 
@@ -17,19 +17,19 @@ function Track:new(_table, ticks_per_beat)
             velocity = value.velocity
         })
     end
-    setmetatable(instance, Track)
+    setmetatable(instance, rsmfs.track)
     return instance
 end
 
-function Track:print()
+function rsmfs.track:print()
     for index, value in ipairs(self) do
-        log("start: %6.2f, end: %6.2f, note: %3s, velocity: % 3d", value.start_position, value.end_position, value.note, value.velocity)
+        rsmfs.log("start: %6.2f, end: %6.2f, note: %3s, velocity: % 3d", value.start_position, value.end_position, value.note, value.velocity)
     end
 end
 
 -- =========================================
 
-function Track.add_raw(midi_note, tracks)
+function rsmfs.track.add_raw(midi_note, tracks)
     for track_index = 1, 16 do
         if tracks[track_index] == nil then
             table.insert(tracks, {})
