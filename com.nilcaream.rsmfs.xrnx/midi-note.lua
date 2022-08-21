@@ -5,6 +5,7 @@ rsmfs.midi_note.__index = rsmfs.midi_note
 rsmfs.midi_note.notes_sharp = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }
 
 function rsmfs.midi_note:new(event)
+    -- event = {'note', start_time, duration, channel, note, velocity}
     local instance = {
         note_number = event[5],
         note = rsmfs.midi_note.to_note_string(event[5]),

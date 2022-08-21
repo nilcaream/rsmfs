@@ -1,9 +1,9 @@
 require("common")
 
 require("midi-note")
-require("track")
 require("workplace")
 require("options")
+require("note-columns")
 
 rsmfs.main = {}
 
@@ -42,30 +42,29 @@ rsmfs.main.import = function(filename)
     rsmfs.log("Total ticks: " .. stats.nticks)
     rsmfs.log("Ticks per beat: " .. score[1])
 
-    local raw_track_lines = { }
+    local note_columns = rsmfs.note_columns:new(score[1])
 
     rsmfs.log("-------- Raw midi input")
 
     for itrack = 2, #score do
         for _, event in ipairs(score[itrack]) do
 
-            -- TODO check if this is always sorted by start_time; filter by channel if needed
             if event[1] == "note" then
                 local midi_note = rsmfs.midi_note:new(event)
                 rsmfs.log(midi_note:__tostring())
-                rsmfs.track.add_raw(midi_note, raw_track_lines)
+                note_columns:add_midi_note(midi_note)
             end
         end
     end
 
+    local renoise_note_columns = note_columns:get_renoise_note_columns()
     local workplace = rsmfs.workplace:new()
-    workplace:prepare(#raw_track_lines)
+    workplace:prepare(#renoise_note_columns)
 
-    for index, value in ipairs(raw_track_lines) do
-        rsmfs.log("-------- Note column " .. index)
-        local track = rsmfs.track:new(value, score[1])
-        track:print()
-        workplace:update(track, index)
+    for note_column_index, renoise_note_column in ipairs(renoise_note_columns) do
+        rsmfs.log("-------- Note column " .. note_column_index)
+        note_columns:print(note_column_index)
+        workplace:update(note_column_index, renoise_note_column)
     end
 
     return true

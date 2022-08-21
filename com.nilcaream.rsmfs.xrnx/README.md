@@ -23,11 +23,15 @@ This plugin will reuse existing instrument and will only update existing tracks 
 - skipped setting note volume for midi notes with maximum velocity (127).
 - added note-off commands for first line of the track.
 
+#### Version 0.3 (in progress)
+
+- set volume and delay columns as visible.
+
 ## Capabilities and limitations
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
-It is not possible to override midi files import procedure so the midi files need to be renamed to have `.xrmid`   extension. E.g. `my-file.mid` needs to be renamed to `my-file.xrmid` or to `my-file.mid.xrmid`.
+It is not possible to override midi files import procedure so the midi files need to be renamed to have `.xrmid`   extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
 
 Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On import, currently select track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
 
@@ -37,7 +41,7 @@ It might not work well for multi-instrument or percussion midi files.
 
 ### Batch file copy / rename
 
-To create a copy of all `.mid` files in current (`.`) and all nested directories execute the following command:
+To create a copy of all `.mid` files in current directory (`.`) and all nested directories execute the following command:
 
     find . -type f -name '*.mid' -print0 | xargs --null -I{} cp -v {} {}.xrmi
 
@@ -51,7 +55,7 @@ It works in GNU/Linux environment and should work on macOS/OSX. On Windows use T
 
 ## Usage
 
-Double click any `.xrmid` file in songs or instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
+Double click any `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
 
 ## Feedback
 
