@@ -15,21 +15,26 @@ rsmfs.options = {
 rsmfs.options.init = function()
     renoise.tool():add_menu_entry {
         name = "Main Menu:Tools:Renoise Simple Midi File Support",
-        invoke = rsmfs.options.show
+        invoke = rsmfs.options.configure_or_load
     }
 end
 
-rsmfs.options.show = function(on_action)
+rsmfs.options.configure = function()
+    return rsmfs.options.show(false)
+end
+
+rsmfs.options.configure_or_load = function()
+    return rsmfs.options.show(true)
+end
+
+rsmfs.options.show = function(include_load_file)
     rsmfs.log("-------- Options")
 
     local vb = renoise.ViewBuilder()
 
     local DIALOG_MARGIN = renoise.ViewBuilder.DEFAULT_DIALOG_MARGIN
     local CONTENT_SPACING = renoise.ViewBuilder.DEFAULT_CONTROL_SPACING
-    local CONTENT_MARGIN = renoise.ViewBuilder.DEFAULT_CONTROL_MARGIN
     local DEFAULT_CONTROL_HEIGHT = renoise.ViewBuilder.DEFAULT_CONTROL_HEIGHT
-    local DEFAULT_DIALOG_BUTTON_HEIGHT = renoise.ViewBuilder.DEFAULT_DIALOG_BUTTON_HEIGHT
-    local DEFAULT_MINI_CONTROL_HEIGHT = renoise.ViewBuilder.DEFAULT_MINI_CONTROL_HEIGHT
     local TEXT_ROW_WIDTH = 140
 
     local add_checkbox = function(text, value, on_change)
@@ -110,21 +115,30 @@ rsmfs.options.show = function(on_action)
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
-                add_checkbox("Show for each file", rsmfs.options.show_for_each_file, function(v)
+                add_checkbox("Show for each .xrmid file", rsmfs.options.show_for_each_file, function(v)
                     rsmfs.options.show_for_each_file = v
                 end),
             }
         }
     }
 
-    local action = renoise.app():show_custom_prompt(
-            "Renoise Simple Midi File Support", dialog_content, { "OK" }
-    )
+    local buttons
+
+    if include_load_file == true then
+        buttons = { "OK", "Select file", "Close" }
+    else
+        buttons = { "OK", "Close" }
+    end
+
+    local action = renoise.app():show_custom_prompt("Renoise Simple Midi File Support", dialog_content, buttons)
 
     rsmfs.log(action)
 
-    if on_action ~= nil then
-        on_action(action)
+    if include_load_file == true and action == "Select file" then
+        local filename = renoise.app():prompt_for_filename_to_read({ "mid", "xrmid" }, "Select midi file to load")
+        if filename ~= nil and filename ~= "" then
+            rsmfs.main.import(filename)
+        end
     end
 
     return action

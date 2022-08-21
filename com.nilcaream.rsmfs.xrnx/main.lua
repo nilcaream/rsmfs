@@ -24,14 +24,17 @@ rsmfs.main.load = function(filename)
     return result
 end
 
-rsmfs.main.import = function(filename)
-
+rsmfs.main.import_xrmid = function(filename)
     if rsmfs.options.show_for_each_file then
-        if rsmfs.options.show() == "Cancel" then
+        if rsmfs.options.configure() ~= "OK" then
             return false
         end
     end
 
+    return rsmfs.main.import(filename)
+end
+
+rsmfs.main.import = function(filename)
     rsmfs.log("-------- Loading " .. filename)
 
     local midi = rsmfs.main.load(filename)
@@ -73,7 +76,7 @@ end
 rsmfs.main.init = function()
     local integration = { category = "instrument",
                           extensions = { "xrmid" },
-                          invoke = rsmfs.main.import }
+                          invoke = rsmfs.main.import_xrmid }
 
     if renoise.tool():has_file_import_hook(integration.category, integration.extensions) == false then
         renoise.tool():add_file_import_hook(integration)

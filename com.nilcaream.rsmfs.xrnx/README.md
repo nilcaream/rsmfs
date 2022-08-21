@@ -17,21 +17,25 @@ This plugin will reuse existing instrument and will only update existing tracks 
 
 #### Version 0.2
 
-- added an option to skip note volume information (Options - Include velocity = false).
+- added an option to skip note volume information (`Tools - Renoise Simple Midi File Support - Include velocity` = `false`).
 - fixed an issue with old notes cleanup when pattern was too short but had hidden notes in it (outside of pattern lines range).
-- fixed an issue with tool crashing on trying to add notes outside of the Renoise max 512 pattern lines length.  
+- fixed an issue with tool crashing on trying to add notes outside of the Renoise max 512 pattern lines length.
 - skipped setting note volume for midi notes with maximum velocity (127).
 - added note-off commands for first line of the track.
 
 #### Version 0.3 (in progress)
 
-- set volume and delay columns as visible.
+- added a file browser that accepts both `.mid` and `.xrmid` files in `Tools - Renoise Simple Midi File Support - Select file`.
+- fixed an issue with tool crashing on trying to add more than 12 note columns.
+- set volume and delay columns as always visible.
 
 ## Capabilities and limitations
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
-It is not possible to override midi files import procedure so the midi files need to be renamed to have `.xrmid`   extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
+It is not possible to override midi files import procedure (double-click on `.mid` file in instrument file browser) so the midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
+
+To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Select file`.
 
 Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On import, currently select track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
 
@@ -55,7 +59,7 @@ It works in GNU/Linux environment and should work on macOS/OSX. On Windows use T
 
 ## Usage
 
-Double click any `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
+Go to `Tools - Renoise Simple Midi File Support - Select file` to load `.mid` or `.xrmid` file. Alternatively double-click a `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
 
 ## Feedback
 
@@ -69,6 +73,8 @@ MIDI file import is done with MIDI.lua by **Peter J Billam**. It was released un
 * http://luarocks.org/modules/peterbillam/midi/6.9-0
 
 General plugin structure has been significantly inspired by [Additional File Format Import Support](https://www.renoise.com/tools/additional-file-format-import-support) code by **Martin Bealby**.
+
+Additional testing, design ideas and feedback were provided by [Roppenzo](https://forum.renoise.com/u/Roppenzo). 
 
 Thanks!
 

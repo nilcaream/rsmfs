@@ -28,7 +28,12 @@ function rsmfs.workplace:prepare(track_lines_number)
     local remove_note_columns = self.track.visible_note_columns > track_lines_number and rsmfs.options.remove_note_columns
 
     if add_note_columns or remove_note_columns then
-        self.track.visible_note_columns = track_lines_number
+        if track_lines_number > 12 then
+            rsmfs.log("To many note colums: %d. Limiting to 12", track_lines_number)
+            self.track.visible_note_columns = 12
+        else
+            self.track.visible_note_columns = track_lines_number
+        end
     end
 
     for i = 1, self.track.visible_note_columns do
@@ -42,7 +47,10 @@ end
 function rsmfs.workplace:update(note_column_index, renoise_note_column)
     local max_end_position = 1
 
-    -- TODO check note_column_index vs. max Renoise note column count
+    if note_column_index > 12 then
+        rsmfs.log("Skipping note column " .. note_column_index)
+        return
+    end
 
     for index, renoise_note_column_line in ipairs(renoise_note_column) do
         local start_position = math.floor(renoise_note_column_line.start_position)
