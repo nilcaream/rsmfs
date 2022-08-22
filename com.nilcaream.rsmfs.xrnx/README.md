@@ -23,11 +23,19 @@ This plugin will reuse existing instrument and will only update existing tracks 
 - skipped setting note volume for midi notes with maximum velocity (127).
 - added note-off commands for first line of the track.
 
-#### Version 0.3 (in progress)
+#### Version 0.3
 
 - added a file browser that accepts both `.mid` and `.xrmid` files in `Tools - Renoise Simple Midi File Support - Select file`.
 - fixed an issue with tool crashing on trying to add more than 12 note columns.
 - set volume and delay columns as always visible.
+
+#### Version 0.4
+
+- redesigned tools options flow for file loading and removed `Select file` button.
+- added submenus to `Tools - Renoise Simple Midi File Support`
+  - `Options` - opens tool options.
+  - `Import midi file` - opens file browser.
+- added `Import midi file` context menu for pattern track (right click).
 
 ## Capabilities and limitations
 
