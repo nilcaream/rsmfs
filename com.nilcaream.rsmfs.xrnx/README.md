@@ -41,9 +41,9 @@ This plugin will reuse existing instrument and will only update existing tracks 
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
-It is not possible to override midi files import procedure (double-click on `.mid` file in instrument file browser) so the midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
+It is not possible to override midi files import procedure (double-click on `.mid` file in instrument file browser) in the standard file browser (bottom-right corner). To use this file browser midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
 
-To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Select file`.
+To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Import midi file`.
 
 Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On import, currently select track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
 
@@ -67,7 +67,9 @@ It works in GNU/Linux environment and should work on macOS/OSX. On Windows use T
 
 ## Usage
 
-Go to `Tools - Renoise Simple Midi File Support - Select file` to load `.mid` or `.xrmid` file. Alternatively double-click a `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
+Go to `Tools - Renoise Simple Midi File Support - Import midi file` to load `.mid` or `.xrmid` file. Alternatively double-click a `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
+
+Midi files can also be loaded by right-clicking on a pattern track and selecting `Import midi file`. It will work the same as clicking the tools menu described above.
 
 ## Feedback
 
