@@ -37,6 +37,11 @@ This plugin will reuse existing instrument and will only update existing tracks 
   - `Import midi file` - opens file browser.
 - added `Import midi file` context menu for pattern track (right click).
 
+#### Version 0.5
+
+- changed file browser to show all files instead of `.mid` and `.xrmid` due to a glitch on Windows.
+- improved the workflow for file browser to first select the file and then show Options dialog if `Show for each file` is enabled.  
+
 ## Capabilities and limitations
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.

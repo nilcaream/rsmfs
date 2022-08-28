@@ -1,5 +1,4 @@
 require("common")
-require("io")
 
 rsmfs.options = {
     add_note_columns = true,
@@ -16,7 +15,7 @@ rsmfs.options = {
 rsmfs.options.init = function()
     renoise.tool():add_menu_entry {
         name = "Main Menu:Tools:Renoise Simple Midi File Support:Import midi file",
-        invoke = rsmfs.options.conditionally_show_and_load
+        invoke = rsmfs.io.select_and_load_midi_file
     }
 
     renoise.tool():add_menu_entry {
@@ -25,16 +24,14 @@ rsmfs.options.init = function()
     }
 end
 
-rsmfs.options.conditionally_show_and_load = function()
-    local action = "OK"
+rsmfs.options.conditionally_show = function()
+    local result = true
 
     if rsmfs.options.show_for_each_file then
-        action = rsmfs.options.show()
+        result = rsmfs.options.show()
     end
 
-    if action == "OK" then
-        return rsmfs.io.open_file_browser()
-    end
+    return result
 end
 
 rsmfs.options.show = function()
@@ -134,5 +131,5 @@ rsmfs.options.show = function()
 
     local action = renoise.app():show_custom_prompt("Renoise Simple Midi File Support", dialog_content, { "OK", "Close" })
     rsmfs.log(action)
-    return action
+    return action == "OK"
 end

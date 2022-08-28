@@ -23,11 +23,17 @@ rsmfs.io.read_file = function(filename)
     return result
 end
 
-rsmfs.io.open_file_browser = function()
-    local filename = renoise.app():prompt_for_filename_to_read({ "mid", "xrmid" }, "Select midi file to load")
+rsmfs.io.select_and_load_midi_file = function()
+    local filename = renoise.app():prompt_for_filename_to_read({ "*" }, "Select midi file to load")
     if filename ~= nil and filename ~= "" then
-        rsmfs.io.load_midi_file(filename)
-        rsmfs.status("Loaded " .. filename)
+        local lower = string.lower(filename)
+        if lower:match(".+\.mid") or lower:match(".+\.xrmid") then
+            if rsmfs.options.conditionally_show() == true then
+                return rsmfs.io.load_midi_file(filename)
+            end
+        else
+            rsmfs.status("Unsupported file " .. filename)
+        end
     end
 end
 
@@ -66,6 +72,8 @@ rsmfs.io.load_midi_file = function(filename)
         note_columns:print(note_column_index)
         workplace:update(note_column_index, renoise_note_column)
     end
+
+    rsmfs.status("Loaded " .. filename)
 
     return true
 end
