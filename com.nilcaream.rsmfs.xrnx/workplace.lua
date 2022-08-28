@@ -36,8 +36,10 @@ function rsmfs.workplace:prepare(track_lines_number)
         end
     end
 
-    for i = 1, self.track.visible_note_columns do
-        self.pattern_track:line(1):note_column(i).note_string = "OFF"
+    if rsmfs.options.include_note_off then
+        for i = 1, self.track.visible_note_columns do
+            self.pattern_track:line(1):note_column(i).note_string = "OFF"
+        end
     end
 
     self.track.volume_column_visible = true
@@ -72,7 +74,7 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
         end
 
         self.pattern_track:line(start_position + 1):note_column(note_column_index).note_string = renoise_note_column_line.note
-        if start_position < renoise_note_column_line.start_position then
+        if rsmfs.options.include_delay and start_position < renoise_note_column_line.start_position then
             local delay = math.floor((renoise_note_column_line.start_position - start_position) * 256)
             self.pattern_track:line(start_position + 1):note_column(note_column_index).delay_value = delay
         end
@@ -82,10 +84,12 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
             break
         end
 
-        self.pattern_track:line(end_position + 1):note_column(note_column_index).note_string = "OFF"
-        if end_position < renoise_note_column_line.end_position then
-            local delay = math.floor((renoise_note_column_line.end_position - end_position) * 256)
-            self.pattern_track:line(end_position + 1):note_column(note_column_index).delay_value = delay
+        if rsmfs.options.include_note_off then
+            self.pattern_track:line(end_position + 1):note_column(note_column_index).note_string = "OFF"
+            if rsmfs.options.include_delay and end_position < renoise_note_column_line.end_position then
+                local delay = math.floor((renoise_note_column_line.end_position - end_position) * 256)
+                self.pattern_track:line(end_position + 1):note_column(note_column_index).delay_value = delay
+            end
         end
     end
 

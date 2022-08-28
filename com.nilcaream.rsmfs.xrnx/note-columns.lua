@@ -13,7 +13,7 @@ function rsmfs.note_columns:new(ticks_per_beat)
 end
 
 function rsmfs.note_columns:add_midi_note(midi_note)
-    for column_index = 1, 16 do
+    for column_index = 1, 12 do
         if self.renoise_note_columns[column_index] == nil then
             self.renoise_note_columns[column_index] = {}
         end
@@ -34,11 +34,28 @@ function rsmfs.note_columns:add_midi_note(midi_note)
 end
 
 function rsmfs.note_columns:to_renoise_note(midi_note)
+    local start_position = midi_note.start_time / self.tick
+    local end_position = midi_note.end_time / self.tick
+    local end_time = midi_note.end_time
+
+    if rsmfs.options.correct_positions then
+        if start_position - math.floor(start_position) > 0.98 then
+            rsmfs.log("Correcting start note position from %.2f to %.2f", start_position, math.ceil(start_position))
+            start_position = math.ceil(start_position)
+        end
+
+        if end_position - math.floor(end_position) > 0.98 then
+            rsmfs.log("Correcting end note position from %.2f to %.2f", end_position, math.ceil(end_position))
+            end_time = end_time * math.ceil(end_position) / end_position
+            end_position = math.ceil(end_position)
+        end
+    end
+
     return {
         note = midi_note.note,
-        start_position = midi_note.start_time / self.tick,
-        end_position = midi_note.end_time / self.tick,
-        end_time = midi_note.end_time,
+        start_position = start_position,
+        end_position = end_position,
+        end_time = end_time,
         velocity = midi_note.velocity
     }
 end

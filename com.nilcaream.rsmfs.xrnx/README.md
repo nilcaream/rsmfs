@@ -4,7 +4,7 @@
 
 Renoise has built-in support for midi files importing. It works by creating a new midi instrument and adds new dedicated tracks in existing patterns.
 
-This plugin will reuse existing instrument and will only update existing tracks with notes from the file.
+This plugin will reuse existing instrument and will only update currently selected track with notes from the file.
 
 ### Release notes
 
@@ -33,40 +33,45 @@ This plugin will reuse existing instrument and will only update existing tracks 
 
 - redesigned tools options flow for file loading and removed `Select file` button.
 - added submenus to `Tools - Renoise Simple Midi File Support`
-  - `Options` - opens tool options.
-  - `Import midi file` - opens file browser.
+    - `Options` - opens tool options.
+    - `Import midi file` - opens file browser.
 - added `Import midi file` context menu for pattern track (right click).
 
 #### Version 0.5
 
-- changed file browser to show all files instead of `.mid` and `.xrmid` due to a glitch on Windows.
-- improved the workflow for file browser to first select the file and then show Options dialog if `Show for each file` is enabled.  
+- changed file browser to show all files instead of `.mid` and `.xrmid` to a fix an issue on Windows.
+- improved the workflow for file browser to first select the file and then show Options dialog if `Options - Show for each file` is enabled.
+- added an option to skip note delay information (`Options - Include delay` = `false`).
+- added an option to skip note-off (OFF) events (`Options - Include note-off` = `false`).
+- added an option to correct note start or end position if delay is higher than FD (disabled by default) (`Options - Correct positions` = `true`).
+- added tooltips for options.
+- reviewed, corrected and updated this readme.
 
 ## Capabilities and limitations
 
-This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited to my specific need. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
+This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited a single, specific scenario. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
-It is not possible to override midi files import procedure (double-click on `.mid` file in instrument file browser) in the standard file browser (bottom-right corner). To use this file browser midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
+It is not possible to override midi files import procedure (double-click on `.mid` file) in the standard file browser (bottom-right panel). To use this file browser, midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
 
-To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Import midi file`.
+To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Import midi file` or right-click on a track and select `Import midi file`.
 
-Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On import, currently select track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
+Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On midi file load, currently selected track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
 
 Due to pattern number of lines limitation only 512 notes are inserted (per track notes section). No new patterns are created. To overcome this decrease the Options - Resolution value though this might result in missing some of the notes.
 
-It might not work well for multi-instrument or percussion midi files.
+For percussion midi files consider enabling `Options - Correct positions` or disabling `Options - Include note-off`.
 
 ### Batch file copy / rename
 
 To create a copy of all `.mid` files in current directory (`.`) and all nested directories execute the following command:
 
-    find . -type f -name '*.mid' -print0 | xargs --null -I{} cp -v {} {}.xrmi
+    find . -type f -name '*.mid' -print0 | xargs --null -I{} cp -v {} {}.xrmid
 
 In a similar way, to rename all `.mid` files execute:
 
-    find . -type f -name '*.mid' -print0 | xargs --null -I{} mv -v {} {}.xrmi
+    find . -type f -name '*.mid' -print0 | xargs --null -I{} mv -v {} {}.xrmid
 
-Newly created files will be suffixed with `.xrmi` extension. E.g. `my-file.mid` will be copied or renamed to `my-file.mid.xrmid`.
+Newly created files will be suffixed with `.xrmid` extension. E.g. `my-file.mid` will be copied or renamed to `my-file.mid.xrmid`.
 
 It works in GNU/Linux environment and should work on macOS/OSX. On Windows use Total Commander's built-in Multi-rename tool or anything else with a similar capability.
 
@@ -74,11 +79,11 @@ It works in GNU/Linux environment and should work on macOS/OSX. On Windows use T
 
 Go to `Tools - Renoise Simple Midi File Support - Import midi file` to load `.mid` or `.xrmid` file. Alternatively double-click a `.xrmid` file in instruments file browser. Currently selected track in currently selected pattern will be replaced with the notes from the file.
 
-Midi files can also be loaded by right-clicking on a pattern track and selecting `Import midi file`. It will work the same as clicking the tools menu described above.
+Midi files can also be loaded by right-clicking on a pattern track and selecting `Import midi file`. It will work the same as clicking the `Import midi file` in `Tools - Renoise Simple Midi File Support` menu described above.
 
 ## Feedback
 
-This tool works fine for the collection of midi files I have. I haven't tested it enough on other midi files available on the internet, hence the pre-1.0 version. Any suggestions on other use cases that it should support is much appreciated. Example midi files for testing are welcomed.
+This tool is currently under development (pre-1.0 version). Suggestions on other use cases that it should support is much appreciated. Example midi files for testing are welcomed.
 
 ## Credits
 
@@ -89,13 +94,13 @@ MIDI file import is done with MIDI.lua by **Peter J Billam**. It was released un
 
 General plugin structure has been significantly inspired by [Additional File Format Import Support](https://www.renoise.com/tools/additional-file-format-import-support) code by **Martin Bealby**.
 
-Additional testing, design ideas and feedback were provided by [Roppenzo](https://forum.renoise.com/u/Roppenzo). 
+Additional testing, design ideas and feedback were provided by [Roppenzo](https://forum.renoise.com/u/Roppenzo).
 
 Thanks!
 
 ## Licence
 
-This tool is available on [GitHub](https://github.com/nilcaream/rsmfs) and is released under Apache License Version 2.0.
+This tool is available on [GitHub](https://github.com/nilcaream/rsmfs) and is released under Apache License Version 2.0. Feel free to contribute!
 
 ## Download
 

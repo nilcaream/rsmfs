@@ -10,6 +10,9 @@ rsmfs.options = {
     octave = 1,
     show_for_each_file = true,
     include_velocity = true,
+    include_delay = true,
+    include_note_off = true,
+    correct_positions = false
 }
 
 rsmfs.options.init = function()
@@ -44,25 +47,24 @@ rsmfs.options.show = function()
     local DEFAULT_CONTROL_HEIGHT = renoise.ViewBuilder.DEFAULT_CONTROL_HEIGHT
     local TEXT_ROW_WIDTH = 140
 
-    local add_checkbox = function(text, value, on_change)
+    local add_checkbox = function(text, key, tooltip)
         return vb:row {
             vb:text {
                 width = TEXT_ROW_WIDTH,
-                text = text
+                text = text,
             },
             vb:checkbox {
-                value = value,
+                value = rsmfs.options[key],
+                tooltip = tooltip,
                 notifier = function(new_value)
                     rsmfs.log("%s = %s", text, tostring(new_value))
-                    if on_change ~= nil then
-                        on_change(new_value)
-                    end
+                    rsmfs.options[key] = new_value
                 end,
             }
         }
     end
 
-    local add_valuebox = function(text, value, min, max, on_change)
+    local add_valuebox = function(text, key, min, max, tooltip)
         return vb:row {
             vb:text {
                 width = TEXT_ROW_WIDTH,
@@ -71,12 +73,11 @@ rsmfs.options.show = function()
             vb:valuebox {
                 min = min,
                 max = max,
-                value = value,
+                value = rsmfs.options[key],
+                tooltip = tooltip,
                 notifier = function(new_value)
                     rsmfs.log("%s = %s", text, tostring(new_value))
-                    if on_change ~= nil then
-                        on_change(new_value)
-                    end
+                    rsmfs.options[key] = new_value
                 end,
             }
         }
@@ -92,39 +93,30 @@ rsmfs.options.show = function()
             vb:column {
                 spacing = CONTENT_SPACING,
 
-                add_checkbox("Add note columns", rsmfs.options.add_note_columns, function(v)
-                    rsmfs.options.add_note_columns = v
-                end),
-                add_checkbox("Remove note columns", rsmfs.options.remove_note_columns, function(v)
-                    rsmfs.options.remove_note_columns = v
-                end),
-                add_checkbox("Increase number of lines", rsmfs.options.increase_number_of_lines, function(v)
-                    rsmfs.options.increase_number_of_lines = v
-                end),
-                add_checkbox("Decrease number of lines", rsmfs.options.decrease_number_of_lines, function(v)
-                    rsmfs.options.decrease_number_of_lines = v
-                end),
-                add_checkbox("Include velocity", rsmfs.options.include_velocity, function(v)
-                    rsmfs.options.include_velocity = v
-                end),
+                add_checkbox("Add note columns", "add_note_columns", "Add note columns to track if needed"),
+                add_checkbox("Remove note columns", "remove_note_columns", "Remove note columns to track if needed"),
+                add_checkbox("Increase number of lines", "increase_number_of_lines", "Increase pattern number of lines if needed"),
+                add_checkbox("Decrease number of lines", "decrease_number_of_lines", "Decrease pattern number of lines if needed"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
-                add_valuebox("Resolution", rsmfs.options.resolution, 1, 16, function(v)
-                    rsmfs.options.resolution = v
-                end),
-                add_valuebox("Octave correction", rsmfs.options.octave, -4, 4, function(v)
-                    rsmfs.options.octave = v
-                end),
-                add_valuebox("Transposition", rsmfs.options.transposition, -4, 4, function(v)
-                    rsmfs.options.transposition = v
-                end),
+                add_checkbox("Include velocity", "include_velocity", "Include note velocity (volume)"),
+                add_checkbox("Include delay", "include_delay", "Include note delay"),
+                add_checkbox("Include note off", "include_note_off", "Include note-off (OFF)"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
-                add_checkbox("Show for each file", rsmfs.options.show_for_each_file, function(v)
-                    rsmfs.options.show_for_each_file = v
-                end),
+                add_checkbox("Correct positions", "correct_positions", "Increase by 1 note's start or end positions if delay is higher then FD"),
+
+                vb:space { height = DEFAULT_CONTROL_HEIGHT },
+
+                add_valuebox("Resolution", "resolution", 1, 16, "Stretch notes by LPB * resolution / 4"),
+                add_valuebox("Octave correction", "octave", -4, 4, "Transpose all notes by a number of octaves"),
+                add_valuebox("Transposition", "transposition", -12, 12, "Transpose all notes by a number of semitones"),
+
+                vb:space { height = DEFAULT_CONTROL_HEIGHT },
+
+                add_checkbox("Show for each file", "show_for_each_file", "Show this options dialog for each loaded file")
             }
         }
     }
