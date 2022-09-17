@@ -24,8 +24,9 @@ rsmfs.io.read_file = function(filename)
 end
 
 rsmfs.io.select_and_load_midi_file = function()
-    local filename = renoise.app():prompt_for_filename_to_read({ "*" }, "Select midi file to load")
-    if filename ~= nil and filename ~= "" then
+    local filename = renoise.app():prompt_for_filename_to_read({ "*" }, "Select midi file to load") or ""
+
+    if filename ~= "" then
         local lower = string.lower(filename)
         if lower:match(".+\.mid") or lower:match(".+\.xrmid") then
             if rsmfs.options.conditionally_show() == true then

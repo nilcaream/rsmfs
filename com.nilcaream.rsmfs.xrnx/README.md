@@ -39,7 +39,7 @@ This plugin will reuse existing instrument and will only update currently select
 
 #### Version 0.5
 
-- changed file browser to show all files instead of `.mid` and `.xrmid` to a fix an issue on Windows.
+- changed file browser to show all files instead of `.mid` and `.xrmid` to a fix an issue on Windows (thanks, Roppenzo).
 - improved the workflow for file browser to first select the file and then show Options dialog if `Options - Show for each file` is enabled.
 - added an option to skip note delay information (`Options - Include delay` = `false`).
 - added an option to skip note-off (OFF) events (`Options - Include note-off` = `false`).

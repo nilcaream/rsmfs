@@ -106,7 +106,7 @@ rsmfs.options.show = function()
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
-                add_checkbox("Correct positions", "correct_positions", "Increase by 1 note's start or end positions if delay is higher then FD"),
+                add_checkbox("Correct positions", "correct_positions", "Increase by 1 note's start or end positions if delay is higher than FD"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 

@@ -16,7 +16,7 @@ rsmfs.main.init = function()
     --renoise.tool():add_menu_entry {
     --    -- right click on file in disk browser
     --    name = "Disk Browser Files:Import midi file",
-    --    invoke = -- TODO implement
+    --    invoke = function(a) rsmfs.log(a) end
     --}
 
     local integration = {
