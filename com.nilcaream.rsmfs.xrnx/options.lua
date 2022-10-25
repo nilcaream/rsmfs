@@ -12,7 +12,8 @@ rsmfs.options = {
     include_velocity = true,
     include_delay = true,
     include_note_off = true,
-    correct_positions = false
+    correct_positions = false,
+    insert_at_cursor = false
 }
 
 rsmfs.options.init = function()
@@ -93,20 +94,21 @@ rsmfs.options.show = function()
             vb:column {
                 spacing = CONTENT_SPACING,
 
-                add_checkbox("Add note columns", "add_note_columns", "Add note columns to track if needed"),
-                add_checkbox("Remove note columns", "remove_note_columns", "Remove note columns to track if needed"),
-                add_checkbox("Increase number of lines", "increase_number_of_lines", "Increase pattern number of lines if needed"),
-                add_checkbox("Decrease number of lines", "decrease_number_of_lines", "Decrease pattern number of lines if needed"),
+                add_checkbox("Add note columns", "add_note_columns", "Adds note columns to track if needed"),
+                add_checkbox("Remove note columns", "remove_note_columns", "Removes note columns to track if needed"),
+                add_checkbox("Increase number of lines", "increase_number_of_lines", "Increases pattern number of lines if needed"),
+                add_checkbox("Decrease number of lines", "decrease_number_of_lines", "Decreases pattern number of lines if needed"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
-                add_checkbox("Include velocity", "include_velocity", "Include note velocity (volume)"),
-                add_checkbox("Include delay", "include_delay", "Include note delay"),
-                add_checkbox("Include note off", "include_note_off", "Include note-off (OFF)"),
+                add_checkbox("Include velocity", "include_velocity", "Includes note velocity (volume)"),
+                add_checkbox("Include delay", "include_delay", "Includes note delay"),
+                add_checkbox("Include note off", "include_note_off", "Includes note-off (OFF)"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
                 add_checkbox("Correct positions", "correct_positions", "Increase by 1 note's start or end positions if delay is higher than FD"),
+                add_checkbox("Insert at cursor position", "insert_at_cursor", "Inserts notes at cursor position. Clears only notes after the cursor"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 

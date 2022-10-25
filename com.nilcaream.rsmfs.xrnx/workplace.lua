@@ -9,7 +9,9 @@ function rsmfs.workplace:new()
         track_index = renoise.song().selected_track_index,
         track = renoise.song().selected_track,
         pattern = renoise.song().selected_pattern,
-        instrument = renoise.song().selected_instrument_index - 1
+        instrument = renoise.song().selected_instrument_index,
+        line_index = renoise.song().selected_line_index,
+        note_column_index = math.max(1, renoise.song().selected_note_column_index) -- 0 when effect column is selected
     }
     setmetatable(instance, rsmfs.workplace)
     return instance
@@ -17,10 +19,20 @@ end
 
 function rsmfs.workplace:prepare(track_lines_number)
     local number_of_lines = self.pattern.number_of_lines
+    local offset_position = 0
+    local offset_track_lines_number = 0
+
+    if rsmfs.options.insert_at_cursor then
+        offset_position = self.line_index - 1
+        offset_track_lines_number = self.note_column_index - 1
+        track_lines_number = track_lines_number + offset_track_lines_number
+    end
 
     self.pattern.number_of_lines = 512
     for index, line in ipairs(self.pattern_track.lines) do
-        line:clear()
+        if index >= offset_position then
+            line:clear()
+        end
     end
     self.pattern.number_of_lines = number_of_lines
 
@@ -38,7 +50,7 @@ function rsmfs.workplace:prepare(track_lines_number)
 
     if rsmfs.options.include_note_off then
         for i = 1, self.track.visible_note_columns do
-            self.pattern_track:line(1):note_column(i).note_string = "OFF"
+            self.pattern_track:line(1 + offset_position):note_column(i + offset_track_lines_number).note_string = "OFF"
         end
     end
 
@@ -48,6 +60,12 @@ end
 
 function rsmfs.workplace:update(note_column_index, renoise_note_column)
     local max_end_position = 1
+    local offset_position = 0
+
+    if rsmfs.options.insert_at_cursor then
+        offset_position = self.line_index - 1
+        note_column_index = note_column_index + self.note_column_index - 1
+    end
 
     if note_column_index > 12 then
         rsmfs.log("Skipping note column " .. note_column_index)
@@ -55,8 +73,8 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
     end
 
     for index, renoise_note_column_line in ipairs(renoise_note_column) do
-        local start_position = math.floor(renoise_note_column_line.start_position)
-        local end_position = math.floor(renoise_note_column_line.end_position)
+        local start_position = offset_position + math.floor(renoise_note_column_line.start_position)
+        local end_position = offset_position + math.floor(renoise_note_column_line.end_position)
 
         max_end_position = math.max(max_end_position, end_position)
 
@@ -67,7 +85,7 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
 
         -- rsmfs.log("Update - line: %d, note: %s, start: %d, end: %d", line_index, pre_track_entry.note, start_position, end_position)
 
-        self.pattern_track:line(start_position + 1):note_column(note_column_index).instrument_value = self.instrument
+        self.pattern_track:line(start_position + 1):note_column(note_column_index).instrument_value = self.instrument - 1
 
         if rsmfs.options.include_velocity and renoise_note_column_line.velocity < 127 then
             self.pattern_track:line(start_position + 1):note_column(note_column_index).volume_value = renoise_note_column_line.velocity

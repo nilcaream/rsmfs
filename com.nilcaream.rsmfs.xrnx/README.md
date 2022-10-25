@@ -11,7 +11,7 @@ This plugin will reuse existing instrument and will only update currently select
 #### Version 0.1
 
 - reads midi files with `.xrmid` extension,
-- prints notes and file information in Scripting Terminal.
+- print notes and file information in Scripting Terminal.
 - adds midi note events (note, volume, delay) to selected pattern track.
 - adjusts number of pattern lines and visible note columns to match the midi file (optional).
 
@@ -19,7 +19,7 @@ This plugin will reuse existing instrument and will only update currently select
 
 - added an option to skip note volume information (`Tools - Renoise Simple Midi File Support - Include velocity` = `false`).
 - fixed an issue with old notes cleanup when pattern was too short but had hidden notes in it (outside of pattern lines range).
-- fixed an issue with tool crashing on trying to add notes outside of the Renoise max 512 pattern lines length.
+- fixed an issue with tool crashing on trying to add notes outside the Renoise max 512 pattern lines length.
 - skipped setting note volume for midi notes with maximum velocity (127).
 - added note-off commands for first line of the track.
 
@@ -46,6 +46,10 @@ This plugin will reuse existing instrument and will only update currently select
 - added an option to correct note start or end position if delay is higher than FD (disabled by default) (`Options - Correct positions` = `true`).
 - added tooltips for options.
 - reviewed, corrected and updated this readme.
+
+#### Version 0.6
+
+- added an option to insert notes at cursor position (`Options - Insert at cursor position` = `true`; thanks, Neuro... No Neuro).
 
 ## Capabilities and limitations
 
