@@ -66,7 +66,8 @@ rsmfs.io.load_midi_file = function(filename)
 
     local renoise_note_columns = note_columns:get_renoise_note_columns()
     local workplace = rsmfs.workplace:new()
-    workplace:prepare(#renoise_note_columns)
+
+    workplace:prepare(#renoise_note_columns, note_columns:get_maximum_renoise_end_position())
 
     for note_column_index, renoise_note_column in ipairs(renoise_note_columns) do
         rsmfs.log("-------- Note column " .. note_column_index)

@@ -64,6 +64,14 @@ function rsmfs.note_columns:get_renoise_note_columns()
     return self.renoise_note_columns
 end
 
+function rsmfs.note_columns:get_maximum_renoise_end_position()
+    local max = 1
+    for column_index, renoise_note_column in ipairs(self.renoise_note_columns) do
+        max = math.max(max, renoise_note_column[#renoise_note_column].end_position)
+    end
+    return max
+end
+
 function rsmfs.note_columns:print(column_index)
     for index, renoise_note in ipairs(self.renoise_note_columns[column_index]) do
         rsmfs.log("start: %6.2f, end: %6.2f, note: %3s, velocity: % 3d", renoise_note.start_position, renoise_note.end_position, renoise_note.note, renoise_note.velocity)

@@ -56,6 +56,7 @@ This plugin will reuse existing instrument and will only update currently select
 - fixed a note off placement on insert at cursor position.
 - fixed an issue with missing note delays on insert at cursor position.
 - added an option to maintain existing track notes instead of clearing them by default (`Options - Clear existing notes` = `false`).
+- fixed an issue with invalid number of pattern lines needed to fit all notes.
 
 ## Capabilities and limitations
 
