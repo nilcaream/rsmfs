@@ -17,40 +17,41 @@ function rsmfs.workplace:new()
     return instance
 end
 
-function rsmfs.workplace:prepare(track_lines_number)
+function rsmfs.workplace:prepare(note_columns_number)
     local number_of_lines = self.pattern.number_of_lines
-    local offset_position = 0
-    local offset_track_lines_number = 0
+    local line_index_offset = 0
+    local note_column_index_offset = 0
 
     if rsmfs.options.insert_at_cursor then
-        offset_position = self.line_index - 1
-        offset_track_lines_number = self.note_column_index - 1
-        track_lines_number = track_lines_number + offset_track_lines_number
+        line_index_offset = self.line_index - 1
+        note_column_index_offset = self.note_column_index - 1
     end
 
-    self.pattern.number_of_lines = 512
-    for index, line in ipairs(self.pattern_track.lines) do
-        if index >= offset_position then
-            line:clear()
+    if rsmfs.options.clear_existing_notes then
+        self.pattern.number_of_lines = 512
+        for index, line in ipairs(self.pattern_track.lines) do
+            if index > line_index_offset then
+                line:clear()
+            end
         end
+        self.pattern.number_of_lines = number_of_lines
     end
-    self.pattern.number_of_lines = number_of_lines
 
-    local add_note_columns = self.track.visible_note_columns < track_lines_number and rsmfs.options.add_note_columns
-    local remove_note_columns = self.track.visible_note_columns > track_lines_number and rsmfs.options.remove_note_columns
+    local add_note_columns = self.track.visible_note_columns < (note_columns_number + note_column_index_offset) and rsmfs.options.add_note_columns
+    local remove_note_columns = self.track.visible_note_columns > (note_columns_number + note_column_index_offset) and rsmfs.options.remove_note_columns
 
     if add_note_columns or remove_note_columns then
-        if track_lines_number > 12 then
-            rsmfs.log("To many note colums: %d. Limiting to 12", track_lines_number)
+        if note_columns_number + note_column_index_offset > 12 then
+            rsmfs.log("To many note colums: %d. Limiting to 12", note_columns_number + note_column_index_offset)
             self.track.visible_note_columns = 12
         else
-            self.track.visible_note_columns = track_lines_number
+            self.track.visible_note_columns = note_columns_number + note_column_index_offset
         end
     end
 
     if rsmfs.options.include_note_off then
-        for i = 1, self.track.visible_note_columns do
-            self.pattern_track:line(1 + offset_position):note_column(i + offset_track_lines_number).note_string = "OFF"
+        for i = 1 + note_column_index_offset, math.min(12, note_columns_number + note_column_index_offset) do
+            self.pattern_track:line(1 + line_index_offset):note_column(i).note_string = "OFF"
         end
     end
 
@@ -92,8 +93,8 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
         end
 
         self.pattern_track:line(start_position + 1):note_column(note_column_index).note_string = renoise_note_column_line.note
-        if rsmfs.options.include_delay and start_position < renoise_note_column_line.start_position then
-            local delay = math.floor((renoise_note_column_line.start_position - start_position) * 256)
+        if rsmfs.options.include_delay and start_position < renoise_note_column_line.start_position + offset_position then
+            local delay = math.floor((renoise_note_column_line.start_position + offset_position - start_position) * 256)
             self.pattern_track:line(start_position + 1):note_column(note_column_index).delay_value = delay
         end
 
@@ -104,8 +105,8 @@ function rsmfs.workplace:update(note_column_index, renoise_note_column)
 
         if rsmfs.options.include_note_off then
             self.pattern_track:line(end_position + 1):note_column(note_column_index).note_string = "OFF"
-            if rsmfs.options.include_delay and end_position < renoise_note_column_line.end_position then
-                local delay = math.floor((renoise_note_column_line.end_position - end_position) * 256)
+            if rsmfs.options.include_delay and end_position < renoise_note_column_line.end_position + offset_position then
+                local delay = math.floor((renoise_note_column_line.end_position + offset_position - end_position) * 256)
                 self.pattern_track:line(end_position + 1):note_column(note_column_index).delay_value = delay
             end
         end

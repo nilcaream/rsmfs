@@ -51,19 +51,27 @@ This plugin will reuse existing instrument and will only update currently select
 
 - added an option to insert notes at cursor position (`Options - Insert at cursor position` = `true`; thanks, Neuro... No Neuro).
 
+#### Version 0.7
+
+- fixed a note off placement on insert at cursor position.
+- fixed an issue with missing note delays on insert at cursor position.
+- added an option to maintain existing track notes instead of clearing them by default (`Options - Clear existing notes` = `false`).
+
 ## Capabilities and limitations
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited a single, specific scenario. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
 
-It is not possible to override midi files import procedure (double-click on `.mid` file) in the standard file browser (bottom-right panel). To use this file browser, midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
+It is not possible to override midi files import procedure (double-click on a `.mid` file) in the standard file browser (bottom-right panel). To use this file browser, midi files need to be renamed to have `.xrmid` extension. E.g. `my-file.mid` needs to be renamed or copied to `my-file.xrmid` or to `my-file.mid.xrmid`.
 
 To load `.mid` file directly go to `Tools - Renoise Simple Midi File Support - Import midi file` or right-click on a track and select `Import midi file`.
 
-Currently, it only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On midi file load, currently selected track will be cleared and extended if needed. All midi channels are read and all use the same instrument.
+Currently, the tool only interprets `note-on` and `note-off` midi events. All notes will use currently selected instrument. On midi file load, currently selected track will be cleared and extended. This is configurable in `Options`. All midi channels are read and all use the same instrument.
 
-Due to pattern number of lines limitation only 512 notes are inserted (per track notes section). No new patterns are created. To overcome this decrease the Options - Resolution value though this might result in missing some of the notes.
+Due to pattern number of lines limitation, only 512 notes are inserted (per track notes section). No new patterns are created. To overcome this, decrease `Options - Resolution` value though this might result in missing some notes.
 
 For percussion midi files consider enabling `Options - Correct positions` or disabling `Options - Include note-off`.
+
+To work with short midi files like single chords or chord progressions consider enabling `Options - Insert at cursor position` and disabling `Options - Include note off` and `Options - Clear existing notes`. Experiment with other options to find the best solution.
 
 ### Batch file copy / rename
 
@@ -100,11 +108,13 @@ General plugin structure has been significantly inspired by [Additional File For
 
 Additional testing, design ideas and feedback were provided by [Roppenzo](https://forum.renoise.com/u/Roppenzo).
 
+Insert at cursor idea by [Neuro... No Neuro](https://ab-nnn.bandcamp.com).
+
 Thanks!
 
 ## Licence
 
-This tool is available on [GitHub](https://github.com/nilcaream/rsmfs) and is released under Apache License Version 2.0. Feel free to contribute!
+This tool is available on [GitHub](https://github.com/nilcaream/rsmfs) and is released under Apache License Version 2.0. Feel free to reuse, fork or contribute!
 
 ## Download
 

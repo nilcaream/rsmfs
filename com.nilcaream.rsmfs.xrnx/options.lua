@@ -13,7 +13,8 @@ rsmfs.options = {
     include_delay = true,
     include_note_off = true,
     correct_positions = false,
-    insert_at_cursor = false
+    insert_at_cursor = false,
+    clear_existing_notes = true
 }
 
 rsmfs.options.init = function()
@@ -108,7 +109,8 @@ rsmfs.options.show = function()
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
                 add_checkbox("Correct positions", "correct_positions", "Increase by 1 note's start or end positions if delay is higher than FD"),
-                add_checkbox("Insert at cursor position", "insert_at_cursor", "Inserts notes at cursor position. Clears only notes after the cursor"),
+                add_checkbox("Insert at cursor position", "insert_at_cursor", "Inserts notes at cursor position"),
+                add_checkbox("Clear existing notes", "clear_existing_notes", "Clears existing notes before inserting new notes"),
 
                 vb:space { height = DEFAULT_CONTROL_HEIGHT },
 
