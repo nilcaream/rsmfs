@@ -24,14 +24,34 @@ rsmfs.io.read_file = function(filename)
 end
 
 rsmfs.io.select_and_load_midi_file = function()
-    local filename = renoise.app():prompt_for_filename_to_read(
-      { "*.mid", "*.midi", "*.xrmid" },
-      "Select MIDI file to load"
+    local platform = os.platform()
+    local filename
+    local file_extensions
+
+    if platform == "MACINTOSH" then
+        -- macOS: use file type filters
+        file_extensions = { "*.mid", "*.midi", "*.xrmid" }
+    else
+        -- Windows/Linux: show all files
+        file_extensions = { "*" }
+    end
+
+    filename = renoise.app():prompt_for_filename_to_read(
+        file_extensions,
+        "Select MIDI file to load"
     ) or ""
 
     if filename ~= "" then
         local lower = string.lower(filename)
-        if lower:match("%.mid$") or lower:match("%.midi$") or lower:match("%.xrmid$") then
+        local is_valid = false
+
+        if platform == "MACINTOSH" then
+            is_valid = lower:match("%.mid$") or lower:match("%.midi$") or lower:match("%.xrmid$")
+        else
+            is_valid = lower:match(".+%.mid$") or lower:match(".+%.midi$") or lower:match(".+%.xrmid$")
+        end
+
+        if is_valid then
             if rsmfs.options.conditionally_show() == true then
                 return rsmfs.io.load_midi_file(filename)
             end
