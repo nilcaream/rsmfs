@@ -58,6 +58,11 @@ This plugin will reuse existing instrument and will only update currently select
 - added an option to maintain existing track notes instead of clearing them by default (`Options - Clear existing notes` = `false`).
 - fixed an issue with invalid number of pattern lines needed to fit all notes.
 
+#### Version 0.8
+
+- improved macOS support for midi file browser (by Ryan Knutson).
+- improved Windows and Linux midi files matching patterns.
+
 ## Capabilities and limitations
 
 This is my first Renoise tool and first code in Lua. I am also new to the midi file format and midi events. The use case implemented here is very simple and might be limited a single, specific scenario. It is not meant to be a replacement for the built-in midi files import nor a general purpose midi file to Renoise song converter.
@@ -110,6 +115,8 @@ General plugin structure has been significantly inspired by [Additional File For
 Additional testing, design ideas and feedback were provided by [Roppenzo](https://forum.renoise.com/u/Roppenzo).
 
 Insert at cursor idea by [Neuro... No Neuro](https://ab-nnn.bandcamp.com).
+
+macOS dialog compatibility by [Ryan Knutson](https://github.com/ryanknutson).
 
 Thanks!
 
